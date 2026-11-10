@@ -43,8 +43,14 @@ public class Calc {
         return termRest(tokens, next[1], value * next[0]);
     }
 
-    // 숫자 또는 괄호 식: {값, 다음 인덱스} 반환
+    // 숫자, 괄호 식, 단항 음수: {값, 다음 인덱스} 반환
     private static int[] factor(String[] tokens, int index) {
+        if (tokens[index].equals("-")) {
+            // 단항 음수: 뒤따르는 항을 재귀로 계산한 뒤 부호 반전
+            int[] operand = factor(tokens, index + 1);
+            return new int[]{-operand[0], operand[1]};
+        }
+
         if (tokens[index].equals("(")) {
             // 괄호 안을 재귀로 계산하고 닫는 괄호 다음으로 이동
             int[] inner = expr(tokens, index + 1);
